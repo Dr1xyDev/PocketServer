@@ -20,18 +20,18 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: Download JADX
+      - name: Download latest JADX
         run: |
-          wget https://github.com/skylot/jadx/releases/latest/download/jadx-1.4.7.zip
-          unzip jadx-1.4.7.zip
-          chmod +x jadx-*/bin/jadx
+          wget https://github.com/skylot/jadx/releases/latest/download/jadx.zip
+          unzip jadx.zip
+          chmod +x jadx/bin/jadx
 
       - name: Decompile APK
         run: |
           mkdir output
-          ./jadx-*/bin/jadx -d output pocket.apk
+          ./jadx/bin/jadx -d output pocket.apk
 
-      - name: Zip Decompiled APK
+      - name: Compress result
         run: |
           zip -r pocket_decompiled.zip output
 
