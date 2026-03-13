@@ -1,0 +1,42 @@
+name: Decompile APK with JADX
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "pocket.apk"
+
+jobs:
+  decompile:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Download JADX
+        run: |
+          wget https://github.com/skylot/jadx/releases/latest/download/jadx-1.4.7.zip
+          unzip jadx-1.4.7.zip
+          chmod +x jadx-*/bin/jadx
+
+      - name: Decompile APK
+        run: |
+          mkdir output
+          ./jadx-*/bin/jadx -d output pocket.apk
+
+      - name: Zip Decompiled APK
+        run: |
+          zip -r pocket_decompiled.zip output
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pocket-apk-decompiled
+          path: pocket_decompiled.zip
