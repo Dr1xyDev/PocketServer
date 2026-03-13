@@ -22,8 +22,11 @@ jobs:
 
       - name: Download latest JADX
         run: |
-          wget https://github.com/skylot/jadx/releases/latest/download/jadx.zip
-          unzip jadx.zip
+          # Obtener la última versión disponible
+          LATEST_VERSION=$(curl -s https://api.github.com/repos/skylot/jadx/releases/latest | grep '"tag_name"' | head -1 | cut -d'"' -f4)
+          echo "Downloading JADX $LATEST_VERSION"
+          wget "https://github.com/skylot/jadx/releases/download/${LATEST_VERSION}/jadx-${LATEST_VERSION}.zip"
+          unzip "jadx-${LATEST_VERSION}.zip"
           chmod +x jadx/bin/jadx
 
       - name: Decompile APK
